@@ -22,20 +22,21 @@ class FoldersSection(object):
         self.newTypeKey = options.get('new-type-key', '_type')
 
         self.folderType = options.get('folder-type', 'Folder')
-        self.cache      = options.get('cache', 'true').lower() == 'true'
-        
-        self.seen       = set()
-    
+        self.cache = options.get('cache', 'true').lower() == 'true'
+
+        self.seen = set()
+
     def __iter__(self):
 
         for item in self.previous:
 
             keys = item.keys()
             pathKey = self.pathKey(*keys)[0]
-            
-            if not pathKey: # not enough info
-                yield item; continue
-            
+
+            if not pathKey:  # not enough info
+                yield item
+                continue
+
             newPathKey = self.newPathKey or pathKey
             newTypeKey = self.newTypeKey
 
