@@ -1,24 +1,28 @@
+# -*- coding:utf-8 -*-
+from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.interfaces import ITransmogrifier
+from collective.transmogrifier.tests import setUp
+from collective.transmogrifier.tests import tearDown
+from collective.transmogrifier.transmogrifier import configuration_registry
+from Products.Five import zcml
+from zope.component import provideAdapter
+from zope.component import provideUtility
+from zope.interface import classImplements
+from zope.interface import directlyProvides
+from zope.interface import implements
+from zope.testing import cleanup
+from zope.testing import doctest
+
+import collective.transmogrifier
+import operator
 import os
 import shutil
 import tempfile
 import unittest
-import operator
-from zope.interface import classImplements, implements, directlyProvides
-from zope.component import provideUtility, provideAdapter
-from zope.testing import doctest, cleanup
-from Products.Five import zcml
 
-import collective.transmogrifier
-from collective.transmogrifier.transmogrifier import configuration_registry
-from collective.transmogrifier.interfaces import ISectionBlueprint
-from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.interfaces import ITransmogrifier
-
-from collective.transmogrifier.tests import setUp
-from collective.transmogrifier.tests import tearDown
 
 # Unit tests
-
 class MetaDirectivesTests(unittest.TestCase):
     def setUp(self):
         zcml.load_config('meta.zcml', collective.transmogrifier)

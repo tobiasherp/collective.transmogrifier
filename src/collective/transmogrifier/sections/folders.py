@@ -1,9 +1,11 @@
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
+# -*- coding:utf-8 -*-
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
 from collective.transmogrifier.utils import pathsplit
 from collective.transmogrifier.utils import traverse
+from zope.interface import classProvides
+from zope.interface import implements
 
 
 class FoldersSection(object):

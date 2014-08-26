@@ -1,19 +1,22 @@
-import os.path
-import posixpath
-import re
-import sys
-import pprint
-from logging import getLogger, DEBUG
-
+# -*- coding:utf-8 -*-
+from interfaces import ISection
+from interfaces import ISectionBlueprint
+from logging import DEBUG
+from logging import getLogger
 from zope.component import getUtility
+
 try:
     from zope.pagetemplate import engine
 except ImportError:
     # BBB: Zope 2.10
     from zope.app.pagetemplate import engine
 
-from interfaces import ISection
-from interfaces import ISectionBlueprint
+import os.path
+import posixpath
+import pprint
+import re
+import sys
+
 
 def openFileReference(transmogrifier, ref):
     """

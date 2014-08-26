@@ -1,7 +1,10 @@
-import transaction
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
+# -*- coding:utf-8 -*-
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from zope.interface import classProvides
+from zope.interface import implements
+import transaction
+
 
 class SavepointSection(object):
     classProvides(ISectionBlueprint)

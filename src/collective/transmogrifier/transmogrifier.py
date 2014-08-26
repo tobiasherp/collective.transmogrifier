@@ -1,14 +1,15 @@
-import re
-import ConfigParser
-import UserDict
-
+# -*- coding:utf-8 -*-
+from interfaces import ITransmogrifier
+from Products.CMFCore.interfaces import IFolderish
+from utils import constructPipeline
+from utils import resolvePackageReference
 from zope.component import adapts
 from zope.interface import implements
 
-from Products.CMFCore.interfaces import IFolderish
+import ConfigParser
+import re
+import UserDict
 
-from interfaces import ITransmogrifier
-from utils import resolvePackageReference, constructPipeline
 
 class ConfigurationRegistry(object):
     def __init__(self):

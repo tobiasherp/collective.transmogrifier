@@ -1,15 +1,16 @@
-import posixpath
-
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
+# -*- coding:utf-8 -*-
+from Acquisition import aq_base
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
 from collective.transmogrifier.utils import traverse
-
-from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
+from zope.interface import classProvides
+from zope.interface import implements
 
 import logging
+import posixpath
+
 logger = logging.getLogger('collective.transmogrifier.constructor')
 
 class ConstructorSection(object):

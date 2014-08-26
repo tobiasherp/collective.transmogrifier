@@ -1,15 +1,17 @@
+# -*- coding:utf-8 -*-
+from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.transmogrifier import configuration_registry
+from zope.testing import cleanup
+
 import os
 import shutil
 import tempfile
-from zope.testing import cleanup
-
-from collective.transmogrifier.transmogrifier import configuration_registry
-from collective.transmogrifier.interfaces import ISectionBlueprint
-from collective.transmogrifier.interfaces import ISection
 
 # Doctest support
 
 BASEDIR = None
+
 
 def registerConfig(name, configuration):
     filename = os.path.join(BASEDIR, '%s.cfg' % name)

@@ -1,17 +1,22 @@
-import sys
+# -*- coding:utf-8 -*-
+from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.tests import setUp
+from collective.transmogrifier.tests import tearDown
+from Products.Five import zcml
+from zope.component import provideUtility
+from zope.interface import classProvides
+from zope.interface import implements
+from zope.testing import doctest
+
 import io
 import itertools
-import unittest
 import mimetools
-import urllib2
-import shutil
 import posixpath
-from zope.component import provideUtility
-from zope.interface import classProvides, implements
-from zope.testing import doctest
-from collective.transmogrifier.interfaces import ISectionBlueprint, ISection
-from collective.transmogrifier.tests import setUp, tearDown
-from Products.Five import zcml
+import shutil
+import sys
+import unittest
+import urllib2
 
 _marker = object()
 

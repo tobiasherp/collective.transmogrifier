@@ -1,8 +1,12 @@
-import codecs
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
+# -*- coding:utf-8 -*-
 from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.utils import Matcher, Condition
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import Condition
+from collective.transmogrifier.utils import Matcher
+from zope.interface import classProvides, implements
+
+import codecs
+
 
 def _get_default_encoding(site):
     from Products.CMFPlone.utils import getSiteEncoding
