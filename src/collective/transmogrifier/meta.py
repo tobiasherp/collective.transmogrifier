@@ -7,8 +7,8 @@ from zope.interface import Interface
 
 #### transmogrifier:registerConfig
 
-class IRegisterConfigDirective(Interface):
 
+class IRegisterConfigDirective(Interface):
     """Register pipeline configurations with the global registry.
     """
 
@@ -37,8 +37,9 @@ class IRegisterConfigDirective(Interface):
 
 
 _configuration_regs = []
-def registerConfig(_context, configuration, name=u'default', title=None,
-                   description=None):
+
+
+def registerConfig(_context, configuration, name=u'default', title=None, description=None):
     """Add a new configuration to the registry"""
     if title is None:
         title = u"Pipeline configuration '%s'" % name
