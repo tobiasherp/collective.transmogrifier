@@ -38,7 +38,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    keywords='content import filtering',
+    keywords='content import filtering plone transmogrifier',
     author='Jarn',
     author_email='info@jarn.com',
     url='http://pypi.python.org/pypi/collective.transmogrifier',
