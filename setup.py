@@ -1,7 +1,11 @@
-version = '1.5'
+# -*- coding:utf-8 -*-
+from setuptools import find_packages
+from setuptools import setup
 
 import os
-from setuptools import setup, find_packages
+
+version = '1.5'
+description = 'A configurable pipeline, aimed at transforming content for import and export'
 
 
 def read(*rnames):
@@ -16,8 +20,7 @@ long_description = ('\n'.join((
 setup(
     name='collective.transmogrifier',
     version=version,
-    description='A configurable pipeline, aimed at transforming content for '
-                'import and export',
+    description=description,
     long_description=long_description,
     classifiers=[
         'Development Status :: 4 - Beta',
