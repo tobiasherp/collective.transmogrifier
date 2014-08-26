@@ -19,8 +19,21 @@ setup(
     description='A configurable pipeline, aimed at transforming content for '
                 'import and export',
     long_description=long_description,
-    # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+        'Framework :: Plone',
+        'Framework :: Plone :: 3.3',
+        'Framework :: Plone :: 4.0',
+        'Framework :: Plone :: 4.1',
+        'Framework :: Plone :: 4.2',
+        'Framework :: Plone :: 4.3',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     keywords='content import filtering',
     author='Jarn',
