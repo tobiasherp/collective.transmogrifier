@@ -92,6 +92,7 @@ class SplitterConditionSectionTests(unittest.TestCase):
             self.assertEqual(original, yielded)
             self.assertFalse(original is yielded)
 
+
 class SplitterSectionTests(unittest.TestCase):
     def _makeOne(self, transmogrifier, options, previous):
         from splitter import SplitterSection
@@ -107,8 +108,10 @@ class SplitterSectionTests(unittest.TestCase):
     def testInsertExtra(self):
         class Inserter(object):
             implements(ISection)
+
             def __init__(self, transmogrifier, name, options, previous):
                 self.previous = previous
+
             def __iter__(self):
                 count = 0
                 for item in self.previous:
@@ -139,8 +142,10 @@ class SplitterSectionTests(unittest.TestCase):
     def testSkipItems(self):
         class Skip(object):
             implements(ISection)
+
             def __init__(self, transmogrifier, name, options, previous):
                 self.previous = previous
+
             def __iter__(self):
                 count = 0
                 for item in self.previous:
@@ -164,8 +169,8 @@ class SplitterSectionTests(unittest.TestCase):
             dict(id='item-03')              # p2 advanced, p1 no longer ahead
         ])                                  # p1 is done, p2 is done
 
-# Doctest support
 
+# Doctest support
 class SampleSource(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
@@ -187,7 +192,6 @@ class SampleSource(object):
                  status=u'\u00A9'),
         )
 
-
     def __iter__(self):
         for item in self.previous:
             yield item
@@ -198,6 +202,7 @@ class SampleSource(object):
                 item['title'] = item['title'].encode(self.encoding)
                 item['status'] = item['status'].encode(self.encoding)
             yield item
+
 
 class RangeSource(object):
     classProvides(ISectionBlueprint)
@@ -319,6 +324,7 @@ def constructorSetUp(test):
     provideUtility(ContentSource,
         name=u'collective.transmogrifier.sections.tests.contentsource')
 
+
 def foldersSetUp(test):
     sectionsSetUp(test)
 
@@ -363,6 +369,7 @@ def foldersSetUp(test):
     provideUtility(FoldersSource,
         name=u'collective.transmogrifier.sections.tests.folderssource')
 
+
 def pdbSetUp(test):
     sectionsSetUp(test)
 
@@ -373,6 +380,7 @@ def pdbSetUp(test):
         """A helper to push data onto stdin"""
         def __init__(self, src):
             self.lines = src.split('\n')
+
         def readline(self):
             line = self.lines.pop(0)
             print line

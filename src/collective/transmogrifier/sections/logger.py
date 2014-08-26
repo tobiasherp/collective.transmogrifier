@@ -12,7 +12,6 @@ import logging
 
 class LoggerSection(object):
     """Logs a value of a key."""
-
     classProvides(ISectionBlueprint)
     implements(ISection)
 

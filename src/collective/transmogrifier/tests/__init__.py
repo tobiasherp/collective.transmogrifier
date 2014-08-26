@@ -22,10 +22,11 @@ def registerConfig(name, configuration):
         u"'collective.transmogrifier.tests'" % name,
         u'', filename)
 
+
 def setUp(test):
     global BASEDIR
     BASEDIR = tempfile.mkdtemp('transmogrifierTestConfigs')
-    
+
     class PloneSite(object):
         def Title(self):
             return u'Plone Test Site'

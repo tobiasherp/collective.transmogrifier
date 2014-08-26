@@ -13,7 +13,7 @@ import copy
 class ManipulatorSection(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
-    
+
     def __init__(self, transmogrifier, name, options, previous):
         keys = options.get('keys') or ''
         self.keys = Matcher(*keys.splitlines())
@@ -24,7 +24,7 @@ class ManipulatorSection(object):
         self.condition = Condition(options.get('condition', 'python:True'),
                                    transmogrifier, name, options)
         self.previous = previous
-    
+
     def __iter__(self):
         for item in self.previous:
             if self.condition(item):

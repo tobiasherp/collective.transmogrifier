@@ -53,11 +53,12 @@ def openFileReference(transmogrifier, ref):
         return open(filename, 'r')
     return None
 
+
 def resolvePackageReferenceOrFile(reference):
     """A wrapper around def ``resolvePackageReference`` which also work if
     reference is a "plain" filename.
     """
-    
+
     if ':' not in reference:
         return reference
     try:
@@ -65,12 +66,11 @@ def resolvePackageReferenceOrFile(reference):
     except ImportError:
         return reference
 
+
 def resolvePackageReference(reference):
     """Given a package:filename reference, return the filesystem path
-    
     ``package`` is a dotted name to a python package, ``filename`` is assumed
     to be a filename located within the package directory.
-    
     """
     package, filename = reference.strip().split(':', 1)
     package = __import__(package, {}, {}, ('*',))
@@ -102,10 +102,8 @@ def traverse(context, path, default=None):
 
 def constructPipeline(transmogrifier, sections, pipeline=None):
     """Construct a transmogrifier pipeline
-    
     ``sections`` is a list of pipeline section ids. Start the pipeline with
     ``pipeline``, or if that's None, with an empty iterator.
-    
     """
     if pipeline is None:
         pipeline = iter(()) # empty starter section
@@ -117,21 +115,21 @@ def constructPipeline(transmogrifier, sections, pipeline=None):
         section_options = transmogrifier[section_id]
         blueprint_id = section_options['blueprint'].decode('ascii')
         blueprint = getUtility(ISectionBlueprint, blueprint_id)
-        pipeline = blueprint(transmogrifier, section_id, section_options, 
-                             pipeline)
+        pipeline = blueprint(transmogrifier, section_id, section_options, pipeline)
         if not ISection.providedBy(pipeline):
             raise ValueError('Blueprint %s for section %s did not return '
                              'an ISection' % (blueprint_id, section_id))
-        pipeline = iter(pipeline) # ensure you can call .next()
-    
+        pipeline = iter(pipeline)  # ensure you can call .next()
+
     return pipeline
+
 
 def defaultKeys(blueprint, section, key=None):
     """Create a set of item keys based on blueprint id, section name and key
 
     These keys will match more specificly targeted item keys first; first
     _blueprint_section_key, then _blueprint_key, then _section_key, then _key.
-    
+
     key is optional, and when omitted results in _blueprint_section, then
     _blueprint, then _section
 
@@ -147,6 +145,7 @@ def defaultKeys(blueprint, section, key=None):
     if key is not None:
         keys += ('_'.join(parts[:1] + parts[3:]),) # _key
     return keys
+
 
 def defaultMatcher(options, optionname, section, key=None, extra=()):
     """Create a Matcher from an option, with a defaultKeys fallback
@@ -167,21 +166,22 @@ def defaultMatcher(options, optionname, section, key=None, extra=()):
             keys += (key,)
     return Matcher(*keys)
 
+
 class Matcher(object):
     """Given a set of string expressions, return the first match.
-    
+
     Normally items are matched using equality, unless the expression
     starts with re: or regexp:, in which case it is treated as a regular
     expression.
-    
+
     Regular expressions will be compiled and applied in match mode
     (matching anywhere in the string).
-    
+
     On calling, returns a tuple of (matched, matchresult), where matched is
     the matched value, and matchresult is either a boolean or the regular
     expression match object. When no match was made, (None, False) is
     returned.
-    
+
     """
     def __init__(self, *expressions):
         self.expressions = []
@@ -195,7 +195,7 @@ class Matcher(object):
             else:
                 expr = lambda x, y=expr: x == y
             self.expressions.append(expr)
-    
+
     def __call__(self, *values):
         for expr in self.expressions:
             for value in values:
@@ -215,9 +215,9 @@ def pformat_msg(obj):
 
 class Expression(object):
     """A transmogrifier expression
-    
+
     Evaluate the expression with a transmogrifier context.
-    
+
     """
     def __init__(self, expression, transmogrifier, name, options, **extras):
         self.expression = engine.TrustedEngine.compile(expression)
@@ -245,11 +245,12 @@ class Expression(object):
             self.logger.debug('Expression returned: %s', formatted)
         return result
 
+
 class Condition(Expression):
     """A transmogrifier condition expression
-    
+
     Test if a pipeline item matches the given TALES expression.
-    
+
     """
     def __call__(self, item, **extras):
         return bool(super(Condition, self).__call__(item, **extras))
