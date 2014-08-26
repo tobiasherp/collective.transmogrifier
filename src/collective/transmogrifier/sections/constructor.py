@@ -13,10 +13,11 @@ import posixpath
 
 logger = logging.getLogger('collective.transmogrifier.constructor')
 
+
 class ConstructorSection(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
-    
+
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
@@ -26,7 +27,7 @@ class ConstructorSection(object):
                                       ('portal_type', 'Type'))
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
         self.required = bool(options.get('required'))
-    
+
     def __iter__(self):
         for item in self.previous:
             keys = item.keys()
@@ -37,7 +38,7 @@ class ConstructorSection(object):
                 yield item; continue
                         
             type_, path = item[typekey], item[pathkey]
-            
+
             fti = self.ttool.getTypeInfo(type_)
             if fti is None:                           # not an existing type
                 yield item; continue
@@ -58,12 +59,12 @@ class ConstructorSection(object):
                 yield item; continue
             
             obj = fti._constructInstance(context, id)
-            
+
             # For CMF <= 2.1 (aka Plone 3)
             if hasattr(fti, '_finishConstruction'):
                 obj = fti._finishConstruction(obj)
-            
+
             if obj.getId() != id:
                 item[pathkey] = posixpath.join(container, obj.getId())
-            
+
             yield item
