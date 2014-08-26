@@ -120,7 +120,8 @@ class SplitterSectionTests(unittest.TestCase):
                     yield dict(id='extra-%02d' % count)
                     count += 1
 
-        provideUtility(Inserter, ISectionBlueprint,
+        provideUtility(
+            Inserter, ISectionBlueprint,
             name=u'collective.transmogrifier.tests.inserter')
         splitter = self._makeOne(dict(
             inserter=dict(
@@ -128,16 +129,16 @@ class SplitterSectionTests(unittest.TestCase):
             {'pipeline-1': 'inserter', 'pipeline-2': ''},
             (dict(id='item-%02d' % i) for i in range(3)))
         self.assertEqual(list(splitter), [
-            dict(id='item-00', pipeline=1), # p1 advanced, look at p2
-            dict(id='item-00'),             # p2 advanced, look at p1
-            dict(id='extra-00'),            # p1 did not advance
-            dict(id='item-01', pipeline=1), # p1 advanced, look at p2
-            dict(id='item-01'),             # p2 advanced, look at p1
-            dict(id='extra-01'),            # p1 did not advance
-            dict(id='item-02', pipeline=1), # p1 advanced, condition isDone
-            dict(id='extra-02'),            # last in p1 after isDone, l.a. p2
-            dict(id='item-02'),             # p2 advanced
-        ])                                  # p2 is done
+            dict(id='item-00', pipeline=1),  # p1 advanced, look at p2
+            dict(id='item-00'),              # p2 advanced, look at p1
+            dict(id='extra-00'),             # p1 did not advance
+            dict(id='item-01', pipeline=1),  # p1 advanced, look at p2
+            dict(id='item-01'),              # p2 advanced, look at p1
+            dict(id='extra-01'),             # p1 did not advance
+            dict(id='item-02', pipeline=1),  # p1 advanced, condition isDone
+            dict(id='extra-02'),             # last in p1 after isDone, l.a. p2
+            dict(id='item-02'),              # p2 advanced
+        ])                                   # p2 is done
 
     def testSkipItems(self):
         class Skip(object):
@@ -153,7 +154,8 @@ class SplitterSectionTests(unittest.TestCase):
                         item['pipeline'] = 1
                         yield item
                     count += 1
-        provideUtility(Skip, ISectionBlueprint,
+        provideUtility(
+            Skip, ISectionBlueprint,
             name=u'collective.transmogrifier.tests.skip')
         splitter = self._makeOne(dict(
             skip=dict(
@@ -161,13 +163,13 @@ class SplitterSectionTests(unittest.TestCase):
             {'pipeline-1': 'skip', 'pipeline-2': ''},
             (dict(id='item-%02d' % i) for i in range(4)))
         self.assertEqual(list(splitter), [
-            dict(id='item-01', pipeline=1), # p1 is ahead
-            dict(id='item-00'),             # p2 advanced, p1 is skipped
-            dict(id='item-01'),             # p2 advanced, p1 no longer ahead
-            dict(id='item-03', pipeline=1), # p1 is ahead again
-            dict(id='item-02'),             # p2 advanced, p1 is skipped
-            dict(id='item-03')              # p2 advanced, p1 no longer ahead
-        ])                                  # p1 is done, p2 is done
+            dict(id='item-01', pipeline=1),  # p1 is ahead
+            dict(id='item-00'),              # p2 advanced, p1 is skipped
+            dict(id='item-01'),              # p2 advanced, p1 no longer ahead
+            dict(id='item-03', pipeline=1),  # p1 is ahead again
+            dict(id='item-02'),              # p2 advanced, p1 is skipped
+            dict(id='item-03')               # p2 advanced, p1 no longer ahead
+        ])                                   # p1 is done, p2 is done
 
 
 # Doctest support
@@ -229,9 +231,11 @@ def sectionsSetUp(test):
     import collective.transmogrifier.sections
     zcml.load_config('testing.zcml', collective.transmogrifier.sections)
 
-    provideUtility(SampleSource,
+    provideUtility(
+        SampleSource,
         name=u'collective.transmogrifier.sections.tests.samplesource')
-    provideUtility(RangeSource,
+    provideUtility(
+        RangeSource,
         name=u'collective.transmogrifier.sections.tests.rangesource')
 
     import logging
@@ -266,14 +270,17 @@ def constructorSetUp(test):
     sectionsSetUp(test)
 
     class MockPortal(MockObjectManager):
-        existing = True # Existing object
+        existing = True  # Existing object
 
         @property
-        def portal_types(self): return self
+        def portal_types(self):
+            return self
+
         def getTypeInfo(self, type_name):
             self._last_path[:] = ['']
             self._last_type = type_name
-            if type_name in ('FooType', 'BarType'): return self
+            if type_name in ('FooType', 'BarType'):
+                return self
 
         def hasObject(self, id_):
             if isinstance(id_, unicode):
@@ -321,7 +328,8 @@ def constructorSetUp(test):
                 dict(_type='FooType', _path='/spam/eggs/changeme',
                      title='Factories are allowed to change the id'),
             )
-    provideUtility(ContentSource,
+    provideUtility(
+        ContentSource,
         name=u'collective.transmogrifier.sections.tests.contentsource')
 
 
@@ -359,14 +367,20 @@ def foldersSetUp(test):
         def __init__(self, *args, **kw):
             super(FoldersSource, self).__init__(*args, **kw)
             self.sample = (
-                dict(_type='Document', _path='/foo'),                   # in root, do nothing
-                dict(_type='Document', _path='/existing/foo'),          # in existing folder, do nothing
-                dict(_type='Document', _path='/nonexisting/alpha/foo'), # neither parent exists, yield both
-                dict(_type='Document', _path='/nonexisting/beta/foo'),  # this time yield only beta
-                dict(_type='Document'),                                 # no path key
-                dict(_type='Document', _folders_path='/delta/foo'),     # specific path key
+                dict(_type='Document',
+                     _path='/foo'),                    # in root, do nothing
+                dict(_type='Document',
+                     _path='/existing/foo'),           # in existing folder, do nothing
+                dict(_type='Document',
+                     _path='/nonexisting/alpha/foo'),  # neither parent exists, yield both
+                dict(_type='Document',
+                     _path='/nonexisting/beta/foo'),   # this time yield only beta
+                dict(_type='Document'),                # no path key
+                dict(_type='Document',
+                     _folders_path='/delta/foo'),      # specific path key
             )
-    provideUtility(FoldersSource,
+    provideUtility(
+        FoldersSource,
         name=u'collective.transmogrifier.sections.tests.folderssource')
 
 

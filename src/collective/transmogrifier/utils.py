@@ -34,7 +34,7 @@ def openFileReference(transmogrifier, ref):
             from collective.transmogrifier.genericsetup import IMPORT_CONTEXT
             from zope.annotation.interfaces import IAnnotations
             context = IAnnotations(transmogrifier).get(IMPORT_CONTEXT, None)
-            (subdir, filename) = os.path.split(ref.replace('importcontext:',''))
+            (subdir, filename) = os.path.split(ref.replace('importcontext:', ''))
             if subdir == '':
                 # Subdir of '' results import contexts looking for a ''
                 # directory I think
@@ -106,8 +106,8 @@ def constructPipeline(transmogrifier, sections, pipeline=None):
     ``pipeline``, or if that's None, with an empty iterator.
     """
     if pipeline is None:
-        pipeline = iter(()) # empty starter section
-    
+        pipeline = iter(())  # empty starter section
+
     for section_id in sections:
         section_id = section_id.strip()
         if not section_id:
@@ -138,12 +138,12 @@ def defaultKeys(blueprint, section, key=None):
     if key is not None:
         parts.append(key)
     keys = (
-        '_'.join(parts), # _blueprint_section_key or _blueprint_section
-        '_'.join(parts[:2] + parts[3:]), # _blueprint_key or _blueprint
-        '_'.join(parts[:1] + parts[2:]), # _section_key or _section
+        '_'.join(parts),  # _blueprint_section_key or _blueprint_section
+        '_'.join(parts[:2] + parts[3:]),  # _blueprint_key or _blueprint
+        '_'.join(parts[:1] + parts[2:]),  # _section_key or _section
     )
     if key is not None:
-        keys += ('_'.join(parts[:1] + parts[3:]),) # _key
+        keys += ('_'.join(parts[:1] + parts[3:]),)  # _key
     return keys
 
 
@@ -232,12 +232,12 @@ class Expression(object):
     def __call__(self, item, **extras):
         extras.update(self.extras)
         result = self.expression(engine.TrustedEngine.getContext(
-            item = item,
-            transmogrifier = self.transmogrifier,
-            name = self.name,
-            options = self.options,
-            nothing = None,
-            modules = sys.modules,
+            item=item,
+            transmogrifier=self.transmogrifier,
+            name=self.name,
+            options=self.options,
+            nothing=None,
+            modules=sys.modules,
             **extras
         ))
         if self.logger.isEnabledFor(DEBUG):

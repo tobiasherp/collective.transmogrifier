@@ -26,8 +26,8 @@ class ConfigurationRegistry(object):
         self._config_ids.append(name)
         self._config_info[name] = dict(
             id=name,
-            title=title, 
-            description=description, 
+            title=title,
+            description=description,
             configuration=configuration)
 
     def getConfiguration(self, id):
@@ -219,10 +219,9 @@ def _update_section(section, included):
         option = key.strip(' +')
         if option in keys:
             raise ValueError('Option %s specified twice', option)
-        included[option] = '\n'.join([
-            v for v in included.get(option, '').splitlines() +
-                       section[key].splitlines()
-            if v])
+        included[option] = '\n'.join(
+            [v for v in included.get(option, '').splitlines() + section[key].splitlines()
+             if v])
         del section[key]
 
     included.update(section)

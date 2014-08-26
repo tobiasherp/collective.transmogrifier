@@ -78,9 +78,8 @@ class XMLWalkerSection(object):
             if not isinstance(trees, (list, tuple)):
                 trees = [trees]
             for tree in trees:
-                if not (
-                    callable(getattr(tree, 'read', None))
-                    or isinstance(tree, etree.ElementBase)):
+                if not (callable(getattr(tree, 'read', None)) or
+                        isinstance(tree, etree.ElementBase)):
                     tree = html.fragment_fromstring(
                         tree, create_parent=True)
                 if self.cache:
@@ -89,8 +88,8 @@ class XMLWalkerSection(object):
                         self.logger.info('Skipping already seen tree')
                         continue
                     self.seen.add(tree_string)
-                for child_item in self.walk(
-                    item, tree, elementkey, parentkey, childrenkey):
+                for child_item in self.walk(item, tree, elementkey,
+                                            parentkey, childrenkey):
                     yield child_item
 
     def walk(self, item, tree, elementkey, parentkey, childrenkey):

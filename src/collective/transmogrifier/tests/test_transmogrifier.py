@@ -54,7 +54,8 @@ class MetaDirectivesTests(unittest.TestCase):
         path = os.path.split(collective.transmogrifier.__file__)[0]
         self.assertEqual(
             configuration_registry.getConfiguration(
-                 u'collective.transmogrifier.tests.configname'),
+                u'collective.transmogrifier.tests.configname'
+            ),
             dict(id=u'collective.transmogrifier.tests.configname',
                  title=u'config title',
                  description=u'config description',
@@ -162,7 +163,7 @@ bar=
         config = (
             '[transmogrifier]\n'
             'include=collective.transmogrifier.tests.included\n\n'
-            ) + config
+        ) + config
         self._registerConfig(
             u'collective.transmogrifier.tests.includer', config)
         return _load_config(u'collective.transmogrifier.tests.includer')

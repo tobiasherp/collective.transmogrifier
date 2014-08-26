@@ -41,8 +41,9 @@ def setUp(test):
         registerConfig=registerConfig,
         ISectionBlueprint=ISectionBlueprint,
         ISection=ISection,
-        plone=PloneSite(),
-        ))
+        plone=PloneSite())
+    )
+
 
 def tearDown(test):
     from collective.transmogrifier import transmogrifier
