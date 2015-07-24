@@ -12,7 +12,6 @@ long_description = ('\n'.join((
     read('docs', 'HISTORY.txt'),
 )))
 
-
 setup(
     name='collective.transmogrifier',
     version=version,
