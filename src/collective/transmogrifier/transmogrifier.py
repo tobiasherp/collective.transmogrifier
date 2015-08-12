@@ -155,8 +155,8 @@ class Transmogrifier(UserDict.DictMixin):
           got - items which are present before execution of the section
                 (self.previous)
           forwarded - items passed on to the pipe
-	  passed-through - if first the previous items are simply passed on,
-	                   can be used instead of 'got' and 'forwarded'
+          passed-through - if first the previous items are simply passed on,
+                           can be used instead of 'got' and 'forwarded'
           created - items created by the section
           changed - items modified by the section
           dropped - items dropped by the section
@@ -194,25 +194,25 @@ class Transmogrifier(UserDict.DictMixin):
         """
         print a summary of the items seen by the sections of the pipeline
         """
-	first = True
-	def headline():
-	    print 'Items summary'
-	    print '~~~~~~~~~~~~~'
+        first = True
+        def headline():
+            print 'Items summary'
+            print '~~~~~~~~~~~~~'
         for section, dic in self.get_itemcounters():
-	    if first:
-		headline()
-		first = False
+            if first:
+                headline()
+                first = False
             print '[%s]:' % (section,)
             if not dic:
                 print '  - empty! -'
-		continue
+                continue
             maxl = max([len(key) for key in dic.keys()])
             mask = '  %%-%ds%%6d' % (maxl+1,)
             for key, val in dic.items():
                 print mask % (key+':', val)
-	if first and verbose:
-	    headline()
-	    print '  - no counters found! -'
+        if first and verbose:
+            headline()
+            print '  - no counters found! -'
 
 
 class Options(UserDict.DictMixin):
