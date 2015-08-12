@@ -1,6 +1,7 @@
 import re
 import ConfigParser
 import UserDict
+from collections import defaultdict
 
 from zope.component import adapts
 from zope.interface import implements
@@ -127,6 +128,91 @@ class Transmogrifier(UserDict.DictMixin):
             self._collected_info = []
         else:
             del a[:]
+        a = getattr(self, '_items_counter', None)
+        if a is None:
+            self._items_counter = {}
+        else:
+            a.clear()
+        a = getattr(self, '_items_counter_names', None)
+        if a is None:
+            self._items_counter_names = []
+        else:
+            del a[:]
+
+    def create_itemcounter(self, name):
+        """
+        Return a 'count' function for use by sections. Usage:
+
+          def __init__(self, ...):
+              ...
+              self.count = transmogrifier.create_itemcounter(name)
+
+          def __iter__(self, ...):
+              ...
+              self.count('got')
+
+        Suggested keys are:
+          got - items which are present before execution of the section
+                (self.previous)
+          forwarded - items passed on to the pipe
+	  passed-through - if first the previous items are simply passed on,
+	                   can be used instead of 'got' and 'forwarded'
+          created - items created by the section
+          changed - items modified by the section
+          dropped - items dropped by the section
+        """
+        a = self._items_counter
+        if a.has_key(name):
+            # TODO: Logging, optionally: raise Exception 
+            print 'WARNING: counter for section [%(name)s] already found!' \
+                  % locals()
+            counter = a[name]
+        else:
+            counter = a[name] = defaultdict(int)
+        a = self._items_counter_names
+        if name not in a:
+            a.append(name)
+
+        def itemcounter(key):
+            counter[key] += 1
+        itemcounter.__doc__ = 'count items seen by the [%(name)s] section' \
+                              % locals()
+        return itemcounter
+
+    def get_itemcounters(self):
+        """
+        Generate the counters, filled by the --> create_itemcounter functions
+        """
+        a = self._items_counter
+        # generate in creation order: 
+        for name in self._items_counter_names:
+            yield (name,
+                   dict(a[name]),  # nicely printable by pprint module
+                   )
+
+    def print_itemcounters(self, verbose=False):
+        """
+        print a summary of the items seen by the sections of the pipeline
+        """
+	first = True
+	def headline():
+	    print 'Items summary'
+	    print '~~~~~~~~~~~~~'
+        for section, dic in self.get_itemcounters():
+	    if first:
+		headline()
+		first = False
+            print '[%s]:' % (section,)
+            if not dic:
+                print '  - empty! -'
+		continue
+            maxl = max([len(key) for key in dic.keys()])
+            mask = '  %%-%ds%%6d' % (maxl+1,)
+            for key, val in dic.items():
+                print mask % (key+':', val)
+	if first and verbose:
+	    headline()
+	    print '  - no counters found! -'
 
 
 class Options(UserDict.DictMixin):
