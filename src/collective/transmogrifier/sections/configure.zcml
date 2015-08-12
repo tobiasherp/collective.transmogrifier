@@ -58,7 +58,7 @@
     component=".logger.LoggerSection"
     name="collective.transmogrifier.sections.logger"
     />
-    
+
 <utility
     component=".breakpoint.BreakpointSection"
     name="collective.transmogrifier.sections.breakpoint"
@@ -89,6 +89,11 @@
 <utility
     component=".urlopener.URLOpenerSection"
     name="collective.transmogrifier.sections.urlopener"
+    />
+
+<utility
+    component=".summary.SummarySection"
+    name="collective.transmogrifier.sections.summary"
     />
 
 </configure>
