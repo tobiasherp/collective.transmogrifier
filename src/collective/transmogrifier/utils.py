@@ -266,7 +266,7 @@ def wrapped_tarball(export_context, context):
     """
     Return a tarball, created as an export context, for download
 
-    Usage exmaple:
+    Usage example:
 
       transmogrifier(...)
       for info in transmogrifier.get_info('export_context', short=True):
