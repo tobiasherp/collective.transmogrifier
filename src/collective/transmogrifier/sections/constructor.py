@@ -21,6 +21,7 @@ class ConstructorSection(object):
         self.previous = previous
         self.context = transmogrifier.context
         self.ttool = getToolByName(self.context, 'portal_types')
+        self.count = transmogrifier.create_itemcounter(name)
 
         self.typekey = defaultMatcher(options, 'type-key', name, 'type',
                                       ('portal_type', 'Type'))
@@ -28,12 +29,15 @@ class ConstructorSection(object):
         self.required = bool(options.get('required'))
 
     def __iter__(self):
+        count = self.count
         for item in self.previous:
+            count('got')
             keys = item.keys()
             typekey = self.typekey(*keys)[0]
             pathkey = self.pathkey(*keys)[0]
 
             if not (typekey and pathkey):             # not enough info
+                count('forwarded')
                 yield item
                 continue
 
@@ -41,6 +45,7 @@ class ConstructorSection(object):
 
             fti = self.ttool.getTypeInfo(type_)
             if fti is None:                           # not an existing type
+                count('forwarded')
                 yield item
                 continue
 
@@ -53,10 +58,12 @@ class ConstructorSection(object):
                 if self.required:
                     raise KeyError(error)
                 logger.warn(error)
+                count('forwarded')
                 yield item
                 continue
 
             if getattr(aq_base(context), id, None) is not None:  # item exists
+                count('forwarded')
                 yield item
                 continue
 
@@ -69,4 +76,5 @@ class ConstructorSection(object):
             if obj.getId() != id:
                 item[pathkey] = posixpath.join(container, obj.getId())
 
+            count('forwarded')
             yield item
