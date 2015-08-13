@@ -37,6 +37,11 @@ class ConstructorSection(object):
             pathkey = self.pathkey(*keys)[0]
 
             if not (typekey and pathkey):             # not enough info
+                if not typekey:
+                    count('missing-type')
+                if not pathkey:
+                    count('missing-path')
+                count('missing-info')
                 count('forwarded')
                 yield item
                 continue
@@ -45,6 +50,7 @@ class ConstructorSection(object):
 
             fti = self.ttool.getTypeInfo(type_)
             if fti is None:                           # not an existing type
+                count('unknown-type')
                 count('forwarded')
                 yield item
                 continue
@@ -58,11 +64,13 @@ class ConstructorSection(object):
                 if self.required:
                     raise KeyError(error)
                 logger.warn(error)
+                count('missing-container')
                 count('forwarded')
                 yield item
                 continue
 
             if getattr(aq_base(context), id, None) is not None:  # item exists
+                count('item-exists')
                 count('forwarded')
                 yield item
                 continue
@@ -76,5 +84,6 @@ class ConstructorSection(object):
             if obj.getId() != id:
                 item[pathkey] = posixpath.join(container, obj.getId())
 
+            count('object-created')
             count('forwarded')
             yield item
