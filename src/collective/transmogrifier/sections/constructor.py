@@ -5,6 +5,7 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import defaultMatcher
 from collective.transmogrifier.utils import traverse
+from collective.transmogrifier.utils import make_itemInfo
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
@@ -22,6 +23,7 @@ class ConstructorSection(object):
         self.context = transmogrifier.context
         self.ttool = getToolByName(self.context, 'portal_types')
         self.count = transmogrifier.create_itemcounter(name)
+        self.name = name
 
         self.typekey = defaultMatcher(options, 'type-key', name, 'type',
                                       ('portal_type', 'Type'))
@@ -30,8 +32,10 @@ class ConstructorSection(object):
 
     def __iter__(self):
         count = self.count
+        itemInfo = make_itemInfo(self.name, debug=True)
         for item in self.previous:
             count('got')
+            printed = itemInfo(item)
             keys = item.keys()
             typekey = self.typekey(*keys)[0]
             pathkey = self.pathkey(*keys)[0]
@@ -46,6 +50,8 @@ class ConstructorSection(object):
                 yield item
                 continue
 
+            if not printed:
+                itemInfo(item, showone='withinfo')
             type_, path = item[typekey], item[pathkey]
 
             fti = self.ttool.getTypeInfo(type_)
