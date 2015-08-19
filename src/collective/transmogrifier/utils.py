@@ -294,3 +294,100 @@ def _export_result_dict(context, steps=None, messages=None):
             'messages': messages,
             'tarball': context.getArchive(),
             'filename': context.getArchiveFilename()}
+
+
+def name_and_length(key, val):
+    """
+    Helper for the itemInfo functions (created by make_itemInfo)
+
+    >>> name_and_length('key', 'value')
+    'key (5)'
+    """
+    if isinstance(val, basestring):
+        L = len(val)
+        return '%s (%d)' % (key, L)
+    elif isinstance(val, (int, float, bool)):
+        return '%s=%r' % (key, val)
+    else:
+        try:
+            clsname = val.__class__.__name__
+        except AttributeError:
+            clsname = None
+        return '%s (%s)' % (key, clsname)
+
+
+def make_itemInfo(name, *values_of, **kwargs):
+    """
+    For development: create a function which prints a short information about
+    the given item.
+
+    >>> itemInfo = make_itemInfo('example', '_path')
+    >>> item = dict(_type='text/plain', _path='path/to/item', _other='foo')
+    >>> itemInfo(item)
+    [example], item #1:
+        _path='path/to/item'
+        other keys: _other (3), _type (10)
+    True
+
+    The futher calls won't print anything ...
+
+    >>> itemInfo(item)
+    False
+
+    ... unless shownext or showone options are used.
+    """
+    data = {'cnt': 0,
+            'prefix': '[%(name)s], item #%%d:' % locals(),
+            'shownext': 0,
+            'showkeys': set(),
+            'shown': set(),
+            }
+    summary_formatter = kwargs.pop('summary_formatter', name_and_length)
+    if kwargs.pop('debug', False):
+        import pdb
+        pdb.set_trace()  # make_itemInfo
+    if kwargs:
+        raise ValueError('Unsupported keyword arguments: %s' % kwargs)
+    if not values_of:
+        values_of = [('_path',), ('_type',)]
+
+    def itemInfo(item, shownext=None, showone=None):
+        """
+        Print a short info about the given item; by default, only for the first.
+
+        shownext -- a number >= 0; show the next <shownext> items, including this one
+        showone -- a string; show the item in this iteration (in the following
+                   iterations, this key will be consumed)
+        """
+        data['cnt'] += 1
+        if shownext is not None:
+            if not isinstance(shownext, int) or shownext < 0:
+                raise ValueError('shownext=%(shownext)r: integer >= 0'
+                                 ' expected!' % locals())
+            data['shownext'] = shownext
+        if showone is not None and showone not in data['showkeys']:
+            data['showkeys'].add(showone)
+            data['shownext'] += 1
+        if data['shownext']:
+            data['shownext'] -= 1
+        elif data['cnt'] > 1:  # by default only print 1st items
+            return False
+        print data['prefix'] % data['cnt']
+        shadow = dict(item)
+        for keyset in values_of:
+            if isinstance(keyset, basestring):
+                keyset = [keyset]
+            for key in keyset:
+                if key in shadow:
+                    val = shadow.pop(key)
+                    print '    %(key)s=%(val)r' % locals()
+                    break
+        other = sorted(shadow.keys())
+        if other:
+            print '    other keys: ' + ', '.join([
+                summary_formatter(key, shadow[key])
+                for key in other
+                ])
+        return True
+
+    return itemInfo
