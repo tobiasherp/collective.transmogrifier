@@ -351,13 +351,15 @@ def make_itemInfo(name, *values_of, **kwargs):
     if not values_of:
         values_of = [('_path',), ('_type',)]
 
-    def itemInfo(item, shownext=None, showone=None):
+    def itemInfo(item, shownext=None, showone=None, trace=False):
         """
         Print a short info about the given item; by default, only for the first.
 
         shownext -- a number >= 0; show the next <shownext> items, including this one
         showone -- a string; show the item in this iteration (in the following
                    iterations, this key will be consumed)
+        trace -- boolean: if true, pdb.set_trace() after printing
+                 (no printing -> no set_trace)
         """
         data['cnt'] += 1
         if shownext is not None:
@@ -388,6 +390,9 @@ def make_itemInfo(name, *values_of, **kwargs):
                 summary_formatter(key, shadow[key])
                 for key in other
                 ])
+        if trace:
+            import pdb
+            pdb.set_trace()
         return True
 
     return itemInfo
