@@ -22,6 +22,7 @@ class XMLWalkerSection(object):
         self.previous = previous
 
         self.logger = logging.getLogger(name)
+        self.count = transmogrifier.create_itemcounter(name)
 
         self.trees = Expression(
             options.get('trees', "python:item.get('_trees', ())"),
@@ -66,7 +67,9 @@ class XMLWalkerSection(object):
             for key in options.get('element-keys', '').splitlines() if key]
 
     def __iter__(self):
+        count = self.count
         for item in self.previous:
+            count('got')
             trees = self.trees(item) or ()
             if trees:
                 # get everything we need from the item before yielding
@@ -74,6 +77,7 @@ class XMLWalkerSection(object):
                 parentkey = self.parentkey(item)
                 childrenkey = self.childrenkey(item)
 
+            count('forwarded')
             yield item
 
             if not isinstance(trees, (list, tuple)):
@@ -92,6 +96,7 @@ class XMLWalkerSection(object):
                     self.seen.add(tree_string)
                 for child_item in self.walk(
                     item, tree, elementkey, parentkey, childrenkey):
+                    count('created')
                     yield child_item
 
     def walk(self, item, tree, elementkey, parentkey, childrenkey):
