@@ -11,7 +11,7 @@ The summary section blueprint name is
 The correctness of the summary depends on the correct usage of the counting
 function, created by each section using the ``create_itemcounter`` method of
 the ``Transmogrifier`` class.
-An example output could look like this:
+An example output could look like this::
 
     [section1]
     created:    42
