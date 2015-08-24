@@ -50,9 +50,11 @@ class Transmogrifier(UserDict.DictMixin):
     adapts(IFolderish)
 
     def __init__(self, context):
+        print '*** transmogrifier.__init__: %s', locals()
         self.context = context
 
     def __call__(self, configuration_id, **overrides):
+        print '*** transmogrifier.__call__: %s', locals()
         self.configuration_id = configuration_id
         self._raw = _load_config(configuration_id, **overrides)
         self._data = {}
@@ -123,6 +125,7 @@ class Transmogrifier(UserDict.DictMixin):
                 yield dic
 
     def reset_info(self):
+        print '*** transmogrifier.reset_info: %s', locals()
         a = getattr(self, '_collected_info', None)
         if a is None:
             self._collected_info = []
