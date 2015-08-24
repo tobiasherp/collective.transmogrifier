@@ -22,6 +22,7 @@ class SummarySection(object):
 
         self.previous = previous
         self.verbose = boolean(options.get('verbose', 'false'))
+        self.print_sections = boolean(options.get('print-sections', 'false'))
         self.transmogrifier = transmogrifier
         if boolean(options.get('count', 'false')):
             # create the counter:
@@ -44,3 +45,7 @@ class SummarySection(object):
                 count('passed-through')
 
         self.transmogrifier.print_itemcounters(self.verbose)
+        if self.print_sections:
+            from pdb import set_trace
+            set_trace()
+            dic = dict(transmogrifier)
