@@ -42,8 +42,8 @@ class SummarySection(object):
         else:
             # if this section sees any items, the summary below won't be empty
             for item in self.previous:
-                yield item
                 count('passed-through')
+                yield item
 
         self.transmogrifier.print_itemcounters(self.verbose)
         if self.print_sections:
