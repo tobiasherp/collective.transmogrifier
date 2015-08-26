@@ -396,3 +396,85 @@ def make_itemInfo(name, *values_of, **kwargs):
         return True
 
     return itemInfo
+
+
+def _dump_section(name, dic, main='blueprint'):
+    """
+    Return a list of strings, representing a pipeline section;
+    a helper for --> dump_sections().
+
+    >>> values = {'blueprint': 'my.example',
+    ...           'a-boolean': 'false'}
+    >>> _dump_section('example', values)
+    ['[example]', 'blueprint = my.example', 'a-boolean = false']
+
+    The dictionary was not changed or consumed:
+
+    >>> sorted(values.values())
+    [('a-boolean', 'false'), ('blueprint', 'my.example')]
+    """
+    res = ['[%s]' % name]
+    keys = sorted([key for key in dic.keys()
+                   if key != main
+                   ])
+    keys.insert(0, main)
+    for key in keys:
+        try:
+            val = dic[key]
+        except KeyError:
+            # can happen for main key only
+            res.append('# !! No %s value!' % (main,))
+        else:
+            try:
+                val = val.strip()
+                if '\n' in val:
+                    res.append(key + ' =')
+                    for s in filter(None, val.splitlines()):
+                        res.append('   '+s)
+                else:
+                    res.append('%s = %s' % (key, val))
+            except (AttributeError, TypeError):
+                res.append('%s = %r' % (key, val))
+    return res
+
+
+def dump_sections(dic, joiner='\n'):
+    """
+    Return a dump of the given transmogrifier configuration (_raw attribute)
+
+    Will handle non-string values gracefully; such values can't be specified in
+    a configuration file, though.
+
+    The result is a string which could be written to a configuration file;
+    the sections are written in pipeline order.
+    Unused sections are skipped.
+    """
+    res = []
+    sections = None
+    try:
+        tm = dic['transmogrifier']
+    except KeyError:
+        res.append('# !! No [transmogrifier] section!')
+    else:
+        try:
+            sections = filter(None, tm.get('pipeline').splitlines())
+        except KeyError:
+            res.append('# !! [transmogrifier] section lacks pipeline value!')
+        res.extend(_dump_section('transmogrifier', tm, 'pipeline'))
+    res.append('')
+    if sections is None:
+        sections = sorted([k for k in dic.keys()
+                           if k != 'transmogrifier'
+                           ])
+    for section in sections:
+        try:
+            secdict = dic[section]
+        except KeyError:
+            res.append('# !! [%s] section missing!')
+        else:
+            res.extend(_dump_section(section, secdict))
+        res.append('')
+
+    if joiner is None:
+        return res
+    return joiner.join(res)
