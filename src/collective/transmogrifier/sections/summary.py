@@ -3,6 +3,7 @@ from zope.interface import classProvides, implements
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.sections.pathresolver import boolean
+from collective.transmogrifier.utils import dump_sections
 
 
 class SummarySection(object):
@@ -46,6 +47,4 @@ class SummarySection(object):
 
         self.transmogrifier.print_itemcounters(self.verbose)
         if self.print_sections:
-            from pdb import set_trace
-            set_trace()
-            dic = dict(transmogrifier)
+            print dump_sections(self.transmogrifier._raw)
