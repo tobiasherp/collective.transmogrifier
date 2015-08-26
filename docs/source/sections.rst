@@ -17,5 +17,6 @@ Default section blueprints
    sections/manipulator.rst
    sections/savepoint.rst
    sections/splitter.rst
+   sections/summary.rst
    sections/urlopener.rst
    sections/xmlwalker.rst
