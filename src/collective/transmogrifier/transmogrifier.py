@@ -13,7 +13,7 @@ from utils import resolvePackageReference, constructPipeline
 
 CLEANUP_VALUES = tuple(range(4))
 OFF, SILENT, SMART, NOISY = CLEANUP_VALUES
-CLEANUP = SILENT
+CLEANUP = OFF
 
 
 class ConfigurationRegistry(object):
