@@ -257,8 +257,14 @@ class Options(UserDict.DictMixin):
 
     def _substitute(self):
         for key, value in self._raw.items():
-            if '${' in value:
-                self._cooked[key] = self._sub(value, [(self.section, key)])
+            try:
+                if '${' in value:
+                    self._cooked[key] = self._sub(value, [(self.section, key)])
+            except TypeError:
+                raise ValueError("Can't _substitute value %(value)r "
+                                 '(not a string) '
+                                 'for key %(key)r'
+                                 % locals())
 
     def get(self, option, default=None, seen=None):
         try:
